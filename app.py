@@ -1,12 +1,10 @@
-import os, time, requests
+import os, requests
 from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
-AGNES_API = "https://api.agnes-ai.com/v1/video/generations"
-AGNES_KEY = os.environ.get("AGNES_API_KEY", "sk-free-demo-key")
-
-JOBS = {}
+AGNES_BASE = "https://apihub.agnes-ai.com"
+AGNES_KEY = os.environ.get("AGNES_API_KEY", "")
 
 @app.route("/")
 def home():
@@ -18,32 +16,26 @@ def generate():
     duration = request.form.get("duration", "5")
     if not prompt:
         return jsonify({"error": "Prompt likho"}), 400
-    if duration not in ["5", "10"]:
-        duration = "5"
-
+    num_frames = 121 if duration == "5" else 241
     try:
         resp = requests.post(
-            AGNES_API,
-            headers={
-                "Authorization": f"Bearer {AGNES_KEY}",
-                "Content-Type": "application/json"
-            },
+            f"{AGNES_BASE}/v1/videos",
+            headers={"Authorization": f"Bearer {AGNES_KEY}", "Content-Type": "application/json"},
             json={
                 "model": "agnes-video-v2.0",
                 "prompt": prompt,
-                "duration": int(duration),
-                "width": 1088,
-                "height": 832,
-                "fps": 24
+                "height": 768,
+                "width": 1152,
+                "num_frames": num_frames,
+                "frame_rate": 24
             },
-            timeout=30
+            timeout=60
         )
         data = resp.json()
-        if "id" not in data and "task_id" not in data:
-            return jsonify({"error": str(data)[:200]}), 500
-        job_id = data.get("id") or data.get("task_id")
-        JOBS[job_id] = {"status": "processing", "url": None}
-        return jsonify({"job_id": job_id})
+        video_id = data.get("video_id") or data.get("id") or data.get("task_id")
+        if not video_id:
+            return jsonify({"error": f"Task fail: {str(data)[:250]}"}), 500
+        return jsonify({"job_id": video_id})
     except Exception as e:
         return jsonify({"error": f"API error: {str(e)[:200]}"}), 500
 
@@ -51,18 +43,19 @@ def generate():
 def status(job_id):
     try:
         resp = requests.get(
-            f"{AGNES_API}/{job_id}",
+            f"{AGNES_BASE}/agnesapi",
+            params={"video_id": job_id, "model_name": "agnes-video-v2.0"},
             headers={"Authorization": f"Bearer {AGNES_KEY}"},
-            timeout=20
+            timeout=30
         )
         data = resp.json()
-        st = data.get("status", "processing")
-        if st in ["succeeded", "completed", "done"]:
-            url = data.get("url") or data.get("video_url") or data.get("output")
+        st = data.get("status", "")
+        if st in ["completed", "succeeded", "done"]:
+            url = data.get("url") or data.get("video_url")
             return jsonify({"status": "done", "url": url})
         if st in ["failed", "error"]:
-            return jsonify({"status": "failed", "error": data.get("error", "Failed")})
-        return jsonify({"status": "processing"})
+            return jsonify({"status": "failed", "error": data.get("message", "Failed")})
+        return jsonify({"status": "processing", "raw": str(data)[:200]})
     except Exception as e:
         return jsonify({"status": "error", "error": str(e)[:200]}), 500
 
