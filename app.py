@@ -5,6 +5,7 @@ app = Flask(__name__)
 
 AGNES_BASE = "https://apihub.agnes-ai.com"
 AGNES_KEY = os.environ.get("AGNES_API_KEY", "")
+MODEL = "agnes-video-2.5-flash"
 
 @app.route("/")
 def home():
@@ -16,18 +17,18 @@ def generate():
     duration = request.form.get("duration", "5")
     if not prompt:
         return jsonify({"error": "Prompt likho"}), 400
-    num_frames = 121 if duration == "5" else 241
+    if duration not in ["4","5","6","7","8","9","10","11","12"]:
+        duration = "5"
     try:
         resp = requests.post(
             f"{AGNES_BASE}/v1/videos",
             headers={"Authorization": f"Bearer {AGNES_KEY}", "Content-Type": "application/json"},
             json={
-                "model": "agnes-video-v2.0",
+                "model": MODEL,
                 "prompt": prompt,
-                "height": 768,
-                "width": 1152,
-                "num_frames": num_frames,
-                "frame_rate": 24
+                "seconds": duration,
+                "size": "720P",
+                "aspect_ratio": "16:9"
             },
             timeout=60
         )
@@ -44,7 +45,7 @@ def status(job_id):
     try:
         resp = requests.get(
             f"{AGNES_BASE}/agnesapi",
-            params={"video_id": job_id, "model_name": "agnes-video-v2.0"},
+            params={"video_id": job_id, "model_name": MODEL},
             headers={"Authorization": f"Bearer {AGNES_KEY}"},
             timeout=30
         )
@@ -55,7 +56,7 @@ def status(job_id):
             return jsonify({"status": "done", "url": url})
         if st in ["failed", "error"]:
             return jsonify({"status": "failed", "error": data.get("message", "Failed")})
-        return jsonify({"status": "processing", "raw": str(data)[:200]})
+        return jsonify({"status": "processing"})
     except Exception as e:
         return jsonify({"status": "error", "error": str(e)[:200]}), 500
 
