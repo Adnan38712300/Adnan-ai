@@ -9,19 +9,18 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(180deg,#02020a,#0
 .hdr .tag{color:#a78bfa;font-size:10px;letter-spacing:3px;font-weight:700;text-transform:uppercase;margin-bottom:6px}
 .hdr h1{font-size:36px;font-weight:800;background:linear-gradient(135deg,#8b5cf6,#ec4899,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
 .hdr .s{color:#94a3b8;font-size:12px}
-.card{background:rgba(15,23,42,.7);backdrop-filter:blur(14px);border:1px solid rgba(139,92,246,.25);border-radius:18px;padding:22px;margin-bottom:16px;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.card{background:rgba(15,23,42,.7);backdrop-filter:blur(14px);border:1px solid rgba(139,92,246,.25);border-radius:18px;padding:22px;margin-bottom:16px}
 h3{color:#a78bfa;font-size:14px;font-weight:800;margin-bottom:14px;letter-spacing:.5px;text-transform:uppercase}
 label{display:block;color:#cbd5e1;font-size:12px;font-weight:600;margin-bottom:8px;margin-top:14px}
-textarea,select{width:100%;padding:13px;background:#0a1024;border:1.5px solid rgba(139,92,246,.25);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;outline:none;transition:all .2s}
-textarea:focus,select:focus{border-color:#8b5cf6;box-shadow:0 0 0 3px rgba(139,92,246,.12)}
+textarea,select{width:100%;padding:13px;background:#0a1024;border:1.5px solid rgba(139,92,246,.25);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;outline:none}
+textarea:focus,select:focus{border-color:#8b5cf6}
 textarea{min-height:100px;resize:vertical}
 select{cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a78bfa' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right 12px center;background-size:16px;padding-right:36px}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.chip{padding:7px 12px;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.3);border-radius:20px;color:#c4b5fd;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s}
+.chip{padding:7px 12px;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.3);border-radius:20px;color:#c4b5fd;font-size:11px;font-weight:600;cursor:pointer}
 .chip:hover{background:rgba(139,92,246,.25);color:#fff}
-.btn{width:100%;padding:16px;background:linear-gradient(135deg,#8b5cf6,#ec4899);border:0;border-radius:12px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;margin-top:20px;font-family:inherit;letter-spacing:.5px;box-shadow:0 8px 24px rgba(139,92,246,.4);transition:all .15s}
-.btn:active{transform:scale(.98)}
-.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn{width:100%;padding:16px;background:linear-gradient(135deg,#8b5cf6,#ec4899);border:0;border-radius:12px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;margin-top:20px;font-family:inherit}
+.btn:disabled{opacity:.5}
 .status{text-align:center;padding:20px;display:none}
 .status.on{display:block}
 .spin{width:60px;height:60px;border:4px solid rgba(139,92,246,.2);border-top-color:#8b5cf6;border-radius:50%;margin:0 auto 16px;animation:s 1s linear infinite}
@@ -31,128 +30,95 @@ select{cursor:pointer;appearance:none;-webkit-appearance:none;background-image:u
 .result{text-align:center;display:none}
 .result.on{display:block}
 .result video{width:100%;border-radius:14px;border:2px solid rgba(139,92,246,.4);margin-bottom:14px;background:#000}
-.dl{display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:10px;color:#fff;text-decoration:none;font-weight:800;font-size:14px;box-shadow:0 6px 20px rgba(34,197,94,.4);border:0;cursor:pointer;font-family:inherit}
+.dl{display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:10px;color:#fff;text-decoration:none;font-weight:800;font-size:14px;cursor:pointer;border:0;font-family:inherit}
 .err{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.5);padding:12px;border-radius:10px;color:#fca5a5;font-size:13px;text-align:center;display:none;margin-top:14px;line-height:1.5}
 .err.on{display:block}
 .foot{text-align:center;color:#475569;font-size:11px;padding:20px 0}
 </style></head><body>
 <div class="c">
-<div class="hdr">
-<div class="tag">Developer</div>
-<h1>Adnan</h1>
-<div class="s">AI Video Generator — 100% Free</div>
-</div>
-
+<div class="hdr"><div class="tag">Developer</div><h1>Adnan</h1><div class="s">AI Video Generator — 100% Free</div></div>
 <div class="card">
 <h3>🎬 Generate Video</h3>
 <label>Prompt Likho</label>
-<textarea id="promptIn" placeholder="Jaise: 'A cute cat walking on beach, cinematic, slow motion'"></textarea>
+<textarea id="promptIn" placeholder="Jaise: 'A cute cat walking on beach, cinematic'"></textarea>
 <div class="chips">
-<div class="chip" onclick="setPrompt('cinematic lighting, slow motion, 4k')">🎬 Cinematic</div>
-<div class="chip" onclick="setPrompt('anime style, vibrant colors, studio ghibli')">🎌 Anime</div>
-<div class="chip" onclick="setPrompt('realistic, portrait, depth of field')">📷 Realistic</div>
-<div class="chip" onclick="setPrompt('3D render, pixar style, soft lighting')">🧊 3D</div>
-<div class="chip" onclick="setPrompt('drone shot, aerial view, sweeping camera')">🚁 Drone</div>
-<div class="chip" onclick="setPrompt('pakistani culture, traditional, vibrant')">🇵🇰 Pakistani</div>
+<div class="chip" onclick="setPrompt('cinematic, slow motion')">🎬 Cinematic</div>
+<div class="chip" onclick="setPrompt('anime style, vibrant')">🎌 Anime</div>
+<div class="chip" onclick="setPrompt('realistic, portrait')">📷 Realistic</div>
+<div class="chip" onclick="setPrompt('3D render, pixar style')">🧊 3D</div>
 </div>
-
 <label>Duration</label>
 <select id="durSel">
-<option value="4">4 seconds</option>
-<option value="5" selected>5 seconds</option>
-<option value="6">6 seconds</option>
-<option value="8">8 seconds</option>
+<option value="5">5 seconds</option>
 <option value="10">10 seconds</option>
-<option value="12">12 seconds</option>
 </select>
-
 <button class="btn" id="genBtn" onclick="gen()">🎬 Generate Video</button>
-
-<div class="status" id="statusBox">
-<div class="spin"></div>
-<div class="m" id="statusMsg">Generating video...</div>
-<div class="s">2-5 minute lag sakte hain</div>
-</div>
-
+<div class="status" id="statusBox"><div class="spin"></div><div class="m" id="statusMsg">Starting...</div><div class="s">1-3 minute lag sakte hain</div></div>
 <div class="err" id="errBox"></div>
-
-<div class="result" id="resultBox">
-<video id="resultVid" controls loop playsinline></video>
-<button class="dl" onclick="download()">⬇ Download Video</button>
+<div class="result" id="resultBox"><video id="resultVid" controls loop playsinline></video><button class="dl" onclick="download()">⬇ Download</button></div>
 </div>
-</div>
-
 <div class="foot">© 2026 Adnan AI Video</div>
 </div>
 
+<script src="https://js.puter.com/v2/"></script>
 <script>
-var currentUrl = '';
+var currentVideo = null;
 function setPrompt(s){
     var el = document.getElementById('promptIn');
-    var cur = el.value.trim();
-    el.value = cur ? cur + ', ' + s : s;
+    el.value = el.value.trim() ? el.value.trim() + ', ' + s : s;
 }
 function showErr(m){
-    var e = document.getElementById('errBox');
-    e.textContent = m; e.classList.add('on');
-    setTimeout(function(){e.classList.remove('on')}, 12000);
+    var e = document.getElementById('errBox'); e.textContent = m; e.classList.add('on');
+    setTimeout(function(){e.classList.remove('on')}, 15000);
 }
 function gen(){
     var p = document.getElementById('promptIn').value.trim();
-    var d = document.getElementById('durSel').value;
+    var d = parseInt(document.getElementById('durSel').value);
     if(!p){ showErr('Prompt likho'); return; }
     var btn = document.getElementById('genBtn');
-    btn.disabled = true; btn.textContent = '⏳ Starting...';
+    btn.disabled = true; btn.textContent = '⏳ Generating...';
     document.getElementById('statusBox').classList.add('on');
     document.getElementById('resultBox').classList.remove('on');
-    var fd = new FormData();
-    fd.append('prompt', p); fd.append('duration', d);
-    fetch('/generate', {method:'POST', body:fd})
-    .then(function(r){return r.json()})
-    .then(function(res){
-        if(res.error){ showErr(res.error); btn.disabled=false; btn.textContent='🎬 Generate Video'; document.getElementById('statusBox').classList.remove('on'); return; }
-        poll(res.job_id);
+    document.getElementById('statusMsg').textContent = 'Video generate ho rahi hai...';
+
+    puter.ai.txt2vid(p, {
+        model: 'wan-ai/wan2.7-t2v',
+        seconds: d
     })
-    .catch(function(){ showErr('Network error'); btn.disabled=false; btn.textContent='🎬 Generate Video'; document.getElementById('statusBox').classList.remove('on'); });
+    .then(function(videoElement){
+        document.getElementById('statusBox').classList.remove('on');
+        var box = document.getElementById('resultBox');
+        box.innerHTML = '';
+        box.appendChild(videoElement);
+        videoElement.controls = true;
+        videoElement.loop = true;
+        videoElement.style.width = '100%';
+        videoElement.style.borderRadius = '14px';
+        videoElement.style.marginBottom = '14px';
+        var dlBtn = document.createElement('button');
+        dlBtn.className = 'dl';
+        dlBtn.textContent = '⬇ Download';
+        dlBtn.onclick = function(){ downloadVideo(videoElement); };
+        box.appendChild(dlBtn);
+        box.classList.add('on');
+        btn.disabled = false; btn.textContent = '🎬 Generate Another';
+        videoElement.play().catch(function(){});
+        currentVideo = videoElement;
+    })
+    .catch(function(err){
+        document.getElementById('statusBox').classList.remove('on');
+        showErr('Error: ' + JSON.stringify(err).substring(0, 200));
+        btn.disabled = false; btn.textContent = '🎬 Generate Video';
+    });
 }
-function poll(id){
-    var btn = document.getElementById('genBtn');
-    var msgs = ['Generating frames...', 'Rendering...', 'Adding motion...', 'Finalizing...', 'Almost done...'];
-    var i = 0;
-    function check(){
-        fetch('/status/' + id)
-        .then(function(r){return r.json()})
-        .then(function(d){
-            if(d.status === 'done'){
-                document.getElementById('statusBox').classList.remove('on');
-                document.getElementById('resultVid').src = d.url;
-                document.getElementById('resultBox').classList.add('on');
-                currentUrl = d.url;
-                btn.disabled = false; btn.textContent = '🎬 Generate Another';
-                document.getElementById('resultBox').scrollIntoView({behavior:'smooth'});
-            } else if(d.status === 'failed' || d.status === 'error'){
-                document.getElementById('statusBox').classList.remove('on');
-                showErr(d.error || 'Video generate nahi hui');
-                btn.disabled = false; btn.textContent = '🎬 Generate Video';
-            } else {
-                document.getElementById('statusMsg').textContent = msgs[i % msgs.length];
-                i++;
-                setTimeout(check, 8000);
-            }
-        })
-        .catch(function(){ setTimeout(check, 8000); });
-    }
-    check();
-}
-function download(){
-    if(!currentUrl) return;
+function downloadVideo(v){
+    var src = v.src || v.currentSrc;
+    if(!src){ showErr('Video URL nahi mila'); return; }
     var a = document.createElement('a');
-    a.href = currentUrl;
-    a.download = 'adnan-ai-' + Date.now() + '.mp4';
+    a.href = src; a.download = 'adnan-ai-' + Date.now() + '.mp4';
     a.target = '_blank';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
 }
+function download(){ if(currentVideo) downloadVideo(currentVideo); }
 </script>
 </body></html>
