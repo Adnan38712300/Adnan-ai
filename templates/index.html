@@ -43,6 +43,17 @@ select{cursor:pointer;appearance:none;-webkit-appearance:none;background-image:u
 .err{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.5);padding:12px;border-radius:10px;color:#fca5a5;font-size:12px;text-align:center;display:none;margin-top:14px;line-height:1.5}
 .err.on{display:block}
 .foot{text-align:center;color:#475569;font-size:11px;padding:24px 0}
+
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.on{display:flex}
+.modal{background:linear-gradient(145deg,#0f172a,#0a1024);border:2px solid rgba(245,158,11,.5);border-radius:20px;padding:32px 26px;max-width:380px;width:100%;text-align:center;box-shadow:0 0 60px rgba(245,158,11,.4)}
+.modal .icon{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:42px;box-shadow:0 0 30px rgba(245,158,11,.5)}
+.modal h3{color:#f59e0b;font-size:22px;font-weight:900;margin-bottom:10px}
+.modal p{color:#cbd5e1;font-size:14px;line-height:1.6;margin-bottom:14px}
+.modal .timer{font-size:56px;font-weight:900;color:#f59e0b;text-shadow:0 0 30px rgba(245,158,11,.6);margin:8px 0;line-height:1}
+.modal .powered{margin-top:20px;padding-top:14px;border-top:1px solid rgba(255,255,255,.1);color:#64748b;font-size:12px;letter-spacing:.5px}
+.modal .powered b{color:#8b5cf6;font-weight:900}
+
 </style></head><body>
 <div class="c">
 <div class="hdr">
@@ -109,17 +120,20 @@ select{cursor:pointer;appearance:none;-webkit-appearance:none;background-image:u
 <!-- VOICE PANEL -->
 <div class="panel" id="panel-voice">
 <h3>🔊 Text to Voice</h3>
-<label>Text likho</label>
+<label>Text Likho</label>
 <textarea id="voiceText" placeholder="Jo bolna hai wo likho..." maxlength="500"></textarea>
-<label>Voice</label>
+<label>Language Select Karo</label>
 <select id="voiceLang">
-<option value="en">English (US)</option>
-<option value="en-GB">English (UK)</option>
-<option value="ur">Urdu (Pakistan)</option>
-<option value="hi">Hindi</option>
-<option value="ar">Arabic</option>
+<option value="en">🇺🇸 English (US)</option>
+<option value="en-GB">🇬🇧 English (UK)</option>
+<option value="ur">🇵🇰 Urdu (Pakistan)</option>
+<option value="hi">🇮🇳 Hindi</option>
+<option value="ar">🇸🇦 Arabic</option>
+<option value="fr">🇫🇷 French</option>
+<option value="es">🇪🇸 Spanish</option>
 </select>
-<button class="btn" onclick="genVoice()">🔊 Generate Voice</button>
+<button class="btn" id="voiceBtn" onclick="genVoice()">🔊 Generate Voice</button>
+<div class="err" id="voiceErr"></div>
 <div class="result" id="voiceResult">
 <audio id="voiceOut" controls></audio>
 <button class="dl" onclick="downloadVoice()">⬇ Download</button>
@@ -151,20 +165,22 @@ function showErr(id, msg){
 // ===== IMAGE =====
 function genImage(attempt){
     attempt = attempt || 0;
+    
+    // Cooldown check
+    if(attempt === 0 && !checkCooldown('image', function(){ genImage(0); })) return;
+    
     var p = document.getElementById('imgPrompt').value.trim();
     if(!p){ showErr('imgErr', 'Prompt likho'); return; }
     var size = document.getElementById('imgSize').value.split('x');
     var seed = Math.floor(Math.random()*999999);
     
-    // 3 different endpoints try karega
     var endpoints = [
         'https://gen.pollinations.ai/image/' + encodeURIComponent(p) + '?width=' + size[0] + '&height=' + size[1] + '&seed=' + seed + '&nologo=true',
-        'https://image.pollinations.ai/prompt/' + encodeURIComponent(p) + '?width=' + size[0] + '&height=' + size[1] + '&seed=' + seed + '&nologo=true&model=flux',
-        'https://image.pollinations.ai/prompt/' + encodeURIComponent(p) + '?width=' + size[0] + '&height=' + size[1] + '&seed=' + seed + '&nologo=true&model=turbo'
+        'https://image.pollinations.ai/prompt/' + encodeURIComponent(p) + '?width=' + size[0] + '&height=' + size[1] + '&seed=' + seed + '&nologo=true&model=flux'
     ];
     
     if(attempt >= endpoints.length){
-        showErr('imgErr', 'Sab endpoints fail. 1 minute baad try karo.');
+        showErr('imgErr', 'Server busy. 1 minute baad try karo.');
         document.getElementById('imgStatus').classList.remove('on');
         document.getElementById('imgBtn').disabled = false;
         document.getElementById('imgBtn').textContent = '🎨 Try Again';
@@ -173,20 +189,16 @@ function genImage(attempt){
     
     var url = endpoints[attempt];
     var btn = document.getElementById('imgBtn');
-    btn.disabled = true;
-    btn.textContent = '⏳ Generating (try ' + (attempt+1) + '/3)...';
+    btn.disabled = true; btn.textContent = '⏳ Generating...';
     document.getElementById('imgStatus').classList.add('on');
     document.getElementById('imgResult').classList.remove('on');
-    document.getElementById('imgErr').classList.remove('on');
-
+    
     var img = new Image();
-    var timeout = setTimeout(function(){
-        img.src = '';
-        genImage(attempt + 1);
-    }, 15000);
+    var timeout = setTimeout(function(){ img.src=''; genImage(attempt+1); }, 20000);
     
     img.onload = function(){
         clearTimeout(timeout);
+        lastImageTime = Date.now(); // Save time
         document.getElementById('imgOut').src = url;
         document.getElementById('imgResult').classList.add('on');
         document.getElementById('imgStatus').classList.remove('on');
@@ -258,26 +270,34 @@ function downloadVid(){
 
 // ===== VOICE =====
 function genVoice(){
+    // Cooldown check
+    if(!checkCooldown('voice', function(){ genVoice(); })) return;
+    
     var text = document.getElementById('voiceText').value.trim();
-    if(!text){ showErr('vidErr', 'Text likho'); return; }
+    if(!text){ showErr('voiceErr', 'Text likho'); return; }
     var lang = document.getElementById('voiceLang').value;
+    
     if(typeof puter === 'undefined' || !puter.ai.txt2speech){
-        showErr('vidErr', 'Puter.js load nahi hua');
+        showErr('voiceErr', 'Service load nahi hui. Refresh karo.');
         return;
     }
+    
+    var btn = document.getElementById('voiceBtn');
+    btn.disabled = true; btn.textContent = '⏳ Generating...';
+    
     puter.ai.txt2speech(text, lang)
     .then(function(audioElement){
-        var box = document.getElementById('voiceResult');
+        lastVoiceTime = Date.now(); // Save time
         var out = document.getElementById('voiceOut');
-        // Replace with fresh audio element
-        var fresh = audioElement.cloneNode(true);
         out.src = audioElement.src;
-        box.classList.add('on');
-        out.play().catch(function(){});
+        document.getElementById('voiceResult').classList.add('on');
+        btn.disabled = false; btn.textContent = '🔊 Generate Again';
         currentVoice = audioElement.src;
+        out.play().catch(function(){});
     })
     .catch(function(err){
-        showErr('vidErr', 'Voice error: ' + (typeof err === 'string' ? err : JSON.stringify(err)).substring(0, 150));
+        showErr('voiceErr', 'Error: ' + (typeof err === 'string' ? err : JSON.stringify(err)).substring(0, 150));
+        btn.disabled = false; btn.textContent = '🔊 Generate Voice';
     });
 }
 function downloadVoice(){
@@ -288,4 +308,53 @@ function downloadVoice(){
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
 }
 </script>
+
+<!-- COOLDOWN POPUP -->
+<div class="modal-overlay" id="cooldownModal">
+<div class="modal">
+<div class="icon" style="background:linear-gradient(135deg,#f59e0b,#f97316)">⏳</div>
+<h3>Thoda Wait Karo!</h3>
+<p>Free service hai — <b>45 seconds</b> ka gap zaroori hai.</p>
+<div class="timer" id="cooldownTimer">45</div>
+<p style="font-size:12px;color:#94a3b8">seconds remaining</p>
+<div class="powered">Powered by <b>Adnan</b></div>
+</div>
+</div>
+
+
+<script>
+var lastImageTime = 0;
+var lastVoiceTime = 0;
+var COOLDOWN = 45000; // 45 seconds
+
+function showCooldown(remaining, callback){
+    var modal = document.getElementById('cooldownModal');
+    var timer = document.getElementById('cooldownTimer');
+    modal.classList.add('on');
+    timer.textContent = remaining;
+    var interval = setInterval(function(){
+        remaining--;
+        timer.textContent = remaining;
+        if(remaining <= 0){
+            clearInterval(interval);
+            modal.classList.remove('on');
+            if(callback) callback();
+        }
+    }, 1000);
+}
+
+function checkCooldown(type, callback){
+    var now = Date.now();
+    var last = type === 'image' ? lastImageTime : lastVoiceTime;
+    var elapsed = now - last;
+    var remain = Math.ceil((COOLDOWN - elapsed) / 1000);
+    
+    if(elapsed < COOLDOWN && remain > 0){
+        showCooldown(remain, callback);
+        return false;
+    }
+    return true;
+}
+</script>
+
 </body></html>
