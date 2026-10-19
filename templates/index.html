@@ -149,16 +149,22 @@ function showErr(id, msg){
 }
 
 // ===== IMAGE =====
-function genImage(){
+function genImage(retry){
     var p = document.getElementById('imgPrompt').value.trim();
     if(!p){ showErr('imgErr', 'Prompt likho'); return; }
     var size = document.getElementById('imgSize').value.split('x');
+    var seed = Math.floor(Math.random()*999999);
     var url = 'https://image.pollinations.ai/prompt/' + encodeURIComponent(p)
-        + '?width=' + size[0] + '&height=' + size[1] + '&nologo=true&seed=' + Math.floor(Math.random()*999999);
+        + '?width=' + size[0] + '&height=' + size[1]
+        + '&nologo=true&seed=' + seed
+        + '&model=flux'
+        + '&enhance=true';
     var btn = document.getElementById('imgBtn');
     btn.disabled = true; btn.textContent = '⏳ Generating...';
     document.getElementById('imgStatus').classList.add('on');
     document.getElementById('imgResult').classList.remove('on');
+    document.getElementById('imgErr').classList.remove('on');
+
     var img = new Image();
     img.onload = function(){
         document.getElementById('imgOut').src = url;
@@ -168,9 +174,14 @@ function genImage(){
         currentImg = url;
     };
     img.onerror = function(){
-        showErr('imgErr', 'Image generate nahi hui. Dobara try karo.');
-        document.getElementById('imgStatus').classList.remove('on');
-        btn.disabled = false; btn.textContent = '🎨 Generate Image';
+        if(!retry){
+            // Auto-retry 1 baar 3 second baad
+            setTimeout(function(){ genImage(true); }, 3000);
+        } else {
+            showErr('imgErr', 'Server busy hai. 10 second baad "Generate Again" dabao.');
+            document.getElementById('imgStatus').classList.remove('on');
+            btn.disabled = false; btn.textContent = '🎨 Generate Again';
+        }
     };
     img.src = url;
 }
