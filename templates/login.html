@@ -1,0 +1,57 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login — Adnan AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:radial-gradient(ellipse at top,#0a1a2e,#02020a 70%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;color:#fff}
+.box{max-width:400px;width:100%;background:rgba(15,23,42,.85);backdrop-filter:blur(16px);border:1px solid rgba(139,92,246,.3);border-radius:20px;padding:32px 26px;box-shadow:0 0 60px rgba(139,92,246,.25)}
+.dev{text-align:center;color:#a78bfa;font-size:11px;letter-spacing:2px;font-weight:700;text-transform:uppercase;margin-bottom:6px}
+.logo{width:70px;height:70px;border-radius:18px;background:linear-gradient(135deg,#8b5cf6,#ec4899);display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 16px;box-shadow:0 0 40px rgba(139,92,246,.6)}
+h2{text-align:center;font-size:22px;font-weight:900;margin-bottom:6px}
+.sub{text-align:center;color:#94a3b8;font-size:12px;margin-bottom:24px}
+label{display:block;color:#cbd5e1;font-size:12px;font-weight:600;margin-bottom:6px;margin-top:14px}
+input{width:100%;padding:13px;background:#0a1024;border:1.5px solid rgba(139,92,246,.3);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;outline:none;transition:all .2s}
+input:focus{border-color:#8b5cf6;box-shadow:0 0 0 3px rgba(139,92,246,.15)}
+button{width:100%;padding:14px;background:linear-gradient(135deg,#8b5cf6,#ec4899);border:0;border-radius:10px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;margin-top:22px;font-family:inherit;letter-spacing:.3px;box-shadow:0 6px 20px rgba(139,92,246,.4)}
+button:active{transform:scale(.98)}
+.err{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.5);padding:11px;border-radius:8px;color:#fca5a5;font-size:12px;text-align:center;margin-bottom:14px;line-height:1.4}
+.foot{text-align:center;color:#475569;font-size:11px;padding-top:20px;margin-top:20px;border-top:1px solid rgba(255,255,255,.08)}
+</style></head><body>
+<div class="box">
+<div class="dev">Developer Adnan</div>
+<div class="logo">🔒</div>
+<h2>Welcome Back</h2>
+<div class="sub">Login to access AI tools</div>
+{% if error %}<div class="err">{{ error }}</div>{% endif %}
+<form method="POST" id="loginForm">
+<label>Email</label>
+<input name="email" type="email" required autocomplete="username">
+<label>Password</label>
+<input name="password" type="password" required autocomplete="current-password">
+<input type="hidden" name="device_fp" id="deviceFp">
+<input type="hidden" name="device_name" id="deviceName">
+<button type="submit" id="loginBtn">Login</button>
+</form>
+<div class="foot">No signup — Contact admin for account</div>
+</div>
+<script>
+function fingerprint(){
+    var data = [navigator.userAgent, navigator.language, screen.width + 'x' + screen.height, screen.colorDepth, new Date().getTimezoneOffset(), navigator.hardwareConcurrency || 0, navigator.platform].join('|');
+    var hash = 0;
+    for (var i = 0; i < data.length; i++) { hash = ((hash << 5) - hash) + data.charCodeAt(i); hash = hash & hash; }
+    return 'fp_' + Math.abs(hash).toString(16);
+}
+function deviceName(){
+    var ua = navigator.userAgent, browser = 'Unknown', os = 'Unknown';
+    if(ua.indexOf('Chrome') > -1) browser = 'Chrome'; else if(ua.indexOf('Firefox') > -1) browser = 'Firefox';
+    if(ua.indexOf('Android') > -1) os = 'Android'; else if(ua.indexOf('Windows') > -1) os = 'Windows'; else if(ua.indexOf('Mac') > -1) os = 'Mac';
+    return browser + ' on ' + os;
+}
+document.getElementById('deviceFp').value = fingerprint();
+document.getElementById('deviceName').value = deviceName();
+document.getElementById('loginForm').addEventListener('submit', function(){
+    document.getElementById('loginBtn').disabled = true;
+    document.getElementById('loginBtn').textContent = 'Logging in...';
+});
+</script>
+</body></html>
