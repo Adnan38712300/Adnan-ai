@@ -45,15 +45,13 @@ def login():
         if not bcrypt.checkpw(pw.encode(), pw_hash.encode()):
             conn.close(); return render_template("login.html", error="Invalid email or password.")
 
-        # Device Lock Logic
         if saved_device is None:
             c.execute("UPDATE auth_users SET device_id=%s, device_name=%s, last_login=%s WHERE email=%s",
                       (device_fp, device_name, str(datetime.datetime.now()), email))
             conn.commit()
         elif saved_device != device_fp:
             conn.close()
-            # Naya device detect hua
-            return render_template("login.html", error="Login failed: This account is already active on another device. Please contact Admin (+92 306 3871230) to reset your device.", block_device=True)
+            return render_template("login.html", error="Login failed: This account is already active on another device. Please contact Admin (+92 306 3871230) to reset your device.")
 
         conn.close()
         session["user"] = email
