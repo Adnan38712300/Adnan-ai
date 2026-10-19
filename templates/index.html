@@ -72,7 +72,7 @@ select{cursor:pointer;appearance:none;-webkit-appearance:none;background-image:u
 <div class="lbl">Image</div>
 <div class="sub">AI Generate</div>
 </div>
-<div class="box" id="box-video" onclick="showVideoBlocked()">
+<div class="box" id="box-video" onclick="showPanel('video')">
 <span class="ico">🎬</span>
 <div class="lbl">Video</div>
 <div class="sub">AI Generate</div>
@@ -109,12 +109,21 @@ select{cursor:pointer;appearance:none;-webkit-appearance:none;background-image:u
 
 <!-- VIDEO PANEL -->
 <div class="panel" id="panel-video">
-<h3>🎬 Video Generator</h3>
-<div style="text-align:center;padding:40px 20px">
-<div style="font-size:72px;margin-bottom:16px;opacity:.5">🔒</div>
-<h2 style="color:#ef4444;font-size:20px;font-weight:900;margin-bottom:10px">It has not been added by the admin</h2>
-<p style="color:#94a3b8;font-size:13px;line-height:1.6;margin-bottom:20px">Video generation service currently unavailable.</p>
-<p style="color:#64748b;font-size:12px">Contact admin: <a href="https://wa.me/923063871230" style="color:#25D366;text-decoration:none;font-weight:700">+92 306 3871230</a></p>
+<h3>🎬 Generate Video</h3>
+<label>Prompt Likho</label>
+<textarea id="vidPrompt" placeholder="Jaise: 'A cute cat walking on beach, cinematic, slow motion'"></textarea>
+<label>Aspect Ratio</label>
+<select id="vidSize">
+<option value="landscape">🖥️ Landscape (16:9)</option>
+<option value="portrait">📱 Portrait (9:16)</option>
+<option value="square">⬜ Square (1:1)</option>
+</select>
+<button class="btn" id="vidBtn" onclick="genVideo()">🎬 Generate Video</button>
+<div class="status" id="vidStatus"><div class="spin"></div><div class="m" id="vidMsg">Starting... (Puter sign-in required)</div></div>
+<div class="err" id="vidErr"></div>
+<div class="result" id="vidResult">
+<div id="vidOut"></div>
+<button class="dl" onclick="downloadVid()">⬇ Download Video</button>
 </div>
 </div>
 <div class="err" id="vidErr"></div>
@@ -154,9 +163,7 @@ select{cursor:pointer;appearance:none;-webkit-appearance:none;background-image:u
 </div>
 
 <script src="https://js.puter.com/v2/">
-function showVideoBlocked(){
-    document.getElementById('videoBlockedModal').classList.add('on');
-}
+
 
 </script>
 <script>
