@@ -72,13 +72,16 @@ select{cursor:pointer;appearance:none;-webkit-appearance:none;background-image:u
 <!-- IMAGE PANEL -->
 <div class="panel" id="panel-image">
 <h3>🎨 Generate Image</h3>
-<label>Prompt</label>
+<label>Prompt Likho</label>
 <textarea id="imgPrompt" placeholder="Jaise: 'A cute cat wearing sunglasses, cinematic, 4k'"></textarea>
-<label>Size</label>
+<label>Ratio Select Karo</label>
 <select id="imgSize">
-<option value="1024x1024">Square (1024×1024)</option>
-<option value="1280x720">Landscape (1280×720)</option>
-<option value="720x1280">Portrait (720×1280)</option>
+<option value="1024x1024">⬜ Square (1:1) — 1024×1024</option>
+<option value="1280x720">🖥️ Landscape (16:9) — 1280×720</option>
+<option value="720x1280">📱 Portrait (9:16) — 720×1280</option>
+<option value="1152x768">📸 Photo (3:2) — 1152×768</option>
+<option value="768x1152">📖 Book (2:3) — 768×1152</option>
+<option value="1280x550">🎬 Cinema (21:9) — 1280×550</option>
 </select>
 <button class="btn" id="imgBtn" onclick="genImage()">🎨 Generate Image</button>
 <div class="status" id="imgStatus"><div class="spin"></div><div class="m">Generating image...</div></div>
