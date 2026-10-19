@@ -54,6 +54,10 @@ select{cursor:pointer;appearance:none;-webkit-appearance:none;background-image:u
 .modal .powered{margin-top:20px;padding-top:14px;border-top:1px solid rgba(255,255,255,.1);color:#64748b;font-size:12px;letter-spacing:.5px}
 .modal .powered b{color:#8b5cf6;font-weight:900}
 
+
+.modal-close{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#ef4444;font-size:16px;font-weight:800;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;z-index:10}
+.modal-close:hover{background:rgba(239,68,68,.3);transform:scale(1.1)}
+
 </style></head><body>
 <div class="c">
 <div class="hdr">
@@ -314,10 +318,10 @@ function downloadVoice(){
 
 <!-- COOLDOWN POPUP -->
 <div class="modal-overlay" id="cooldownModal">
-<div class="modal">
+<div class="modal" style="position:relative">
+<div class="modal-close" onclick="hideCooldown()">✕</div>
 <div class="icon" style="background:linear-gradient(135deg,#f59e0b,#f97316)">⏳</div>
 <h3>Thoda Wait Karo!</h3>
-<p>Free service hai — <b>45 seconds</b> ka gap zaroori hai.</p>
 <div class="timer" id="cooldownTimer">45</div>
 <p style="font-size:12px;color:#94a3b8">seconds remaining</p>
 <div class="powered">Powered by <b>Adnan</b></div>
@@ -334,6 +338,12 @@ function showCooldown(remaining, callback){
     var modal = document.getElementById('cooldownModal');
     var timer = document.getElementById('cooldownTimer');
     modal.classList.add('on');
+    
+    // Page block — user kuch na kar sake
+    document.body.style.overflow = 'hidden';
+    document.body.style.pointerEvents = 'none';
+    modal.style.pointerEvents = 'auto';
+    
     timer.textContent = remaining;
     var interval = setInterval(function(){
         remaining--;
@@ -341,9 +351,23 @@ function showCooldown(remaining, callback){
         if(remaining <= 0){
             clearInterval(interval);
             modal.classList.remove('on');
+            document.body.style.overflow = '';
+            document.body.style.pointerEvents = '';
             if(callback) callback();
         }
     }, 1000);
+    
+    // Save interval globally for hideCooldown
+    window._cooldownInterval = interval;
+    window._cooldownCallback = callback;
+}
+
+function hideCooldown(){
+    if(window._cooldownInterval) clearInterval(window._cooldownInterval);
+    document.getElementById('cooldownModal').classList.remove('on');
+    document.body.style.overflow = '';
+    document.body.style.pointerEvents = '';
+    // Callback call mat karo — user ne cancel kiya
 }
 
 function checkCooldown(type, callback){
