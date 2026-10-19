@@ -1,0 +1,30 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Account Blocked</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:radial-gradient(ellipse at top,#1a0a0a,#02020a 70%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;color:#fff}
+.box{max-width:420px;width:100%;background:rgba(30,10,15,.9);backdrop-filter:blur(16px);border:2px solid rgba(239,68,68,.5);border-radius:22px;padding:40px 28px;text-align:center;box-shadow:0 0 60px rgba(239,68,68,.4)}
+.icon{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#ef4444,#b91c1c);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:52px;box-shadow:0 0 40px rgba(239,68,68,.6);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 40px rgba(239,68,68,.6)}50%{transform:scale(1.05);box-shadow:0 0 60px rgba(239,68,68,.9)}}
+h1{color:#ef4444;font-size:26px;font-weight:900;margin-bottom:14px;letter-spacing:.5px}
+p{color:#cbd5e1;font-size:14px;line-height:1.7;margin-bottom:10px}
+.contact{display:inline-flex;align-items:center;gap:8px;background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.5);padding:10px 18px;border-radius:22px;margin-top:16px}
+.contact a{color:#25D366;text-decoration:none;font-weight:800;font-size:14px}
+.contact a:hover{text-decoration:underline}
+.dev{color:#64748b;font-size:11px;margin-top:30px;letter-spacing:1px;text-transform:uppercase;font-weight:700}
+.dev b{color:#8b5cf6}
+</style></head><body>
+<div class="box">
+<div class="icon">🚫</div>
+<h1>Account Blocked</h1>
+<p>Aapka account admin ne block kar diya hai.</p>
+<p>Access ke liye admin se rabta karein:</p>
+<div class="contact">📞 <a href="https://wa.me/923063871230" target="_blank">+92 306 3871230</a></div>
+<div class="dev">Powered by <b>Adnan</b></div>
+</div>
+<script>
+// 10 second baad auto logout
+setTimeout(function(){ window.location.href = "/logout"; }, 10000);
+</script>
+</body></html>

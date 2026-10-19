@@ -18,7 +18,21 @@ def get_conn():
 def login_required(f):
     @wraps(f)
     def w(*a, **k):
-        if not session.get("user"): return redirect(url_for("login"))
+        if not session.get("user"):
+            return redirect(url_for("login"))
+        # Har request pe database check — block hua ya nahi
+        try:
+            conn = get_conn()
+            c = conn.cursor()
+            c.execute("SELECT active FROM auth_users WHERE email=%s", (session["user"],))
+            row = c.fetchone()
+            conn.close()
+            if not row or not row[0]:
+                # Blocked — session clear karo
+                session.clear()
+                return render_template("blocked.html")
+        except Exception as e:
+            print("Auth check error:", e, file=sys.stderr)
         return f(*a, **k)
     return w
 
