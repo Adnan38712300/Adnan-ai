@@ -1,124 +1,263 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Adnan AI Video</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<title>Adnan AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:linear-gradient(180deg,#02020a,#0a0a2e 40%,#1a0a2e);color:#e8ecf4;min-height:100vh;padding:16px}
+body{font-family:'Inter',sans-serif;background:linear-gradient(180deg,#02020a 0%,#0a0a2e 40%,#1a0a2e 100%);color:#e8ecf4;min-height:100vh;padding:16px}
 .c{max-width:600px;margin:0 auto}
-.hdr{text-align:center;padding:24px 0 16px}
+.hdr{text-align:center;padding:28px 0 20px}
 .hdr .tag{color:#a78bfa;font-size:10px;letter-spacing:3px;font-weight:700;text-transform:uppercase;margin-bottom:6px}
-.hdr h1{font-size:36px;font-weight:800;background:linear-gradient(135deg,#8b5cf6,#ec4899,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
-.hdr .s{color:#94a3b8;font-size:12px}
-.card{background:rgba(15,23,42,.7);backdrop-filter:blur(14px);border:1px solid rgba(139,92,246,.25);border-radius:18px;padding:22px;margin-bottom:16px}
-h3{color:#a78bfa;font-size:14px;font-weight:800;margin-bottom:14px;letter-spacing:.5px;text-transform:uppercase}
+.hdr h1{font-size:36px;font-weight:900;background:linear-gradient(135deg,#8b5cf6,#ec4899,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;letter-spacing:.5px}
+.hdr .owner{display:inline-flex;align-items:center;gap:8px;background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.4);padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;color:#25D366;margin-top:6px}
+.hdr .owner a{color:#25D366;text-decoration:none}
+.hdr .owner a:hover{text-decoration:underline}
+.boxes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}
+.box{background:linear-gradient(145deg,rgba(15,23,42,.9),rgba(8,12,35,.9));border:2px solid rgba(139,92,246,.3);border-radius:16px;padding:20px 12px;text-align:center;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.box:hover{border-color:#8b5cf6;transform:translateY(-3px);box-shadow:0 10px 30px rgba(139,92,246,.4)}
+.box .ico{font-size:38px;margin-bottom:10px;display:block}
+.box .lbl{color:#fff;font-size:14px;font-weight:800;letter-spacing:.3px}
+.box .sub{color:#94a3b8;font-size:10px;margin-top:4px}
+.box.active{border-color:#8b5cf6;background:linear-gradient(145deg,rgba(139,92,246,.2),rgba(236,72,153,.15));box-shadow:0 0 30px rgba(139,92,246,.5)}
+.panel{display:none;background:rgba(15,23,42,.7);backdrop-filter:blur(14px);border:1px solid rgba(139,92,246,.25);border-radius:18px;padding:22px;margin-top:16px}
+.panel.on{display:block}
+.panel h3{color:#a78bfa;font-size:14px;font-weight:800;margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px}
 label{display:block;color:#cbd5e1;font-size:12px;font-weight:600;margin-bottom:8px;margin-top:14px}
-textarea,select{width:100%;padding:13px;background:#0a1024;border:1.5px solid rgba(139,92,246,.25);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;outline:none}
-textarea:focus,select:focus{border-color:#8b5cf6}
-textarea{min-height:100px;resize:vertical}
+textarea,select,input[type=text]{width:100%;padding:13px;background:#0a1024;border:1.5px solid rgba(139,92,246,.25);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;outline:none;transition:all .2s}
+textarea:focus,select:focus,input:focus{border-color:#8b5cf6;box-shadow:0 0 0 3px rgba(139,92,246,.12)}
+textarea{min-height:90px;resize:vertical}
 select{cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a78bfa' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right 12px center;background-size:16px;padding-right:36px}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.chip{padding:7px 12px;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.3);border-radius:20px;color:#c4b5fd;font-size:11px;font-weight:600;cursor:pointer}
-.chip:hover{background:rgba(139,92,246,.25);color:#fff}
-.btn{width:100%;padding:16px;background:linear-gradient(135deg,#8b5cf6,#ec4899);border:0;border-radius:12px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;margin-top:20px;font-family:inherit}
-.btn:disabled{opacity:.5}
-.status{text-align:center;padding:20px;display:none}
+.btn{width:100%;padding:15px;background:linear-gradient(135deg,#8b5cf6,#ec4899);border:0;border-radius:12px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;margin-top:18px;font-family:inherit;letter-spacing:.5px;box-shadow:0 8px 24px rgba(139,92,246,.4)}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.status{text-align:center;padding:16px;display:none}
 .status.on{display:block}
-.spin{width:60px;height:60px;border:4px solid rgba(139,92,246,.2);border-top-color:#8b5cf6;border-radius:50%;margin:0 auto 16px;animation:s 1s linear infinite}
+.spin{width:50px;height:50px;border:4px solid rgba(139,92,246,.2);border-top-color:#8b5cf6;border-radius:50%;margin:0 auto 12px;animation:s 1s linear infinite}
 @keyframes s{to{transform:rotate(360deg)}}
-.status .m{color:#a78bfa;font-weight:700;font-size:14px}
-.status .s{color:#94a3b8;font-size:12px;margin-top:8px}
-.result{text-align:center;display:none}
+.status .m{color:#a78bfa;font-weight:700;font-size:13px}
+.result{display:none;margin-top:16px;text-align:center}
 .result.on{display:block}
-.result video{width:100%;border-radius:14px;border:2px solid rgba(139,92,246,.4);margin-bottom:14px;background:#000}
-.dl{display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:10px;color:#fff;text-decoration:none;font-weight:800;font-size:14px;cursor:pointer;border:0;font-family:inherit}
-.err{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.5);padding:12px;border-radius:10px;color:#fca5a5;font-size:13px;text-align:center;display:none;margin-top:14px;line-height:1.5}
+.result img{width:100%;border-radius:14px;border:2px solid rgba(139,92,246,.4);margin-bottom:12px}
+.result video{width:100%;border-radius:14px;border:2px solid rgba(139,92,246,.4);margin-bottom:12px;background:#000}
+.result audio{width:100%;margin-bottom:12px}
+.dl{display:inline-block;padding:12px 28px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:10px;color:#fff;text-decoration:none;font-weight:800;font-size:13px;cursor:pointer;border:0;font-family:inherit}
+.err{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.5);padding:12px;border-radius:10px;color:#fca5a5;font-size:12px;text-align:center;display:none;margin-top:14px;line-height:1.5}
 .err.on{display:block}
-.foot{text-align:center;color:#475569;font-size:11px;padding:20px 0}
+.foot{text-align:center;color:#475569;font-size:11px;padding:24px 0}
 </style></head><body>
 <div class="c">
-<div class="hdr"><div class="tag">Developer</div><h1>Adnan</h1><div class="s">AI Video Generator — 100% Free</div></div>
-<div class="card">
-<h3>🎬 Generate Video</h3>
-<label>Prompt Likho</label>
-<textarea id="promptIn" placeholder="Jaise: 'A cute cat walking on beach, cinematic'"></textarea>
-<div class="chips">
-<div class="chip" onclick="setPrompt('cinematic, slow motion')">🎬 Cinematic</div>
-<div class="chip" onclick="setPrompt('anime style, vibrant')">🎌 Anime</div>
-<div class="chip" onclick="setPrompt('realistic, portrait')">📷 Realistic</div>
-<div class="chip" onclick="setPrompt('3D render, pixar style')">🧊 3D</div>
+<div class="hdr">
+<div class="tag">Developer</div>
+<h1>Adnan</h1>
+<div class="owner">👑 Owner: <a href="tel:+923063871230">+92 306 3871230</a></div>
 </div>
-<label>Duration</label>
-<select id="durSel">
-<option value="5">5 seconds</option>
-<option value="10">10 seconds</option>
+
+<div class="boxes">
+<div class="box" id="box-image" onclick="showPanel('image')">
+<span class="ico">🎨</span>
+<div class="lbl">Image</div>
+<div class="sub">AI Generate</div>
+</div>
+<div class="box" id="box-video" onclick="showPanel('video')">
+<span class="ico">🎬</span>
+<div class="lbl">Video</div>
+<div class="sub">AI Generate</div>
+</div>
+<div class="box" id="box-voice" onclick="showPanel('voice')">
+<span class="ico">🔊</span>
+<div class="lbl">Text to Voice</div>
+<div class="sub">AI Speak</div>
+</div>
+</div>
+
+<!-- IMAGE PANEL -->
+<div class="panel" id="panel-image">
+<h3>🎨 Generate Image</h3>
+<label>Prompt</label>
+<textarea id="imgPrompt" placeholder="Jaise: 'A cute cat wearing sunglasses, cinematic, 4k'"></textarea>
+<label>Size</label>
+<select id="imgSize">
+<option value="1024x1024">Square (1024×1024)</option>
+<option value="1280x720">Landscape (1280×720)</option>
+<option value="720x1280">Portrait (720×1280)</option>
 </select>
-<button class="btn" id="genBtn" onclick="gen()">🎬 Generate Video</button>
-<div class="status" id="statusBox"><div class="spin"></div><div class="m" id="statusMsg">Starting...</div><div class="s">1-3 minute lag sakte hain</div></div>
-<div class="err" id="errBox"></div>
-<div class="result" id="resultBox"><video id="resultVid" controls loop playsinline></video><button class="dl" onclick="download()">⬇ Download</button></div>
+<button class="btn" id="imgBtn" onclick="genImage()">🎨 Generate Image</button>
+<div class="status" id="imgStatus"><div class="spin"></div><div class="m">Generating image...</div></div>
+<div class="err" id="imgErr"></div>
+<div class="result" id="imgResult">
+<img id="imgOut">
+<button class="dl" onclick="downloadImg()">⬇ Download</button>
 </div>
-<div class="foot">© 2026 Adnan AI Video</div>
+</div>
+
+<!-- VIDEO PANEL -->
+<div class="panel" id="panel-video">
+<h3>🎬 Generate Video</h3>
+<label>Prompt</label>
+<textarea id="vidPrompt" placeholder="Jaise: 'A cat walking on beach, cinematic, slow motion'"></textarea>
+<button class="btn" id="vidBtn" onclick="genVideo()">🎬 Generate Video</button>
+<div class="status" id="vidStatus"><div class="spin"></div><div class="m">Generating video... (1-3 min)</div></div>
+<div class="err" id="vidErr"></div>
+<div class="result" id="vidResult">
+<div id="vidOut"></div>
+<button class="dl" onclick="downloadVid()">⬇ Download</button>
+</div>
+</div>
+
+<!-- VOICE PANEL -->
+<div class="panel" id="panel-voice">
+<h3>🔊 Text to Voice</h3>
+<label>Text likho</label>
+<textarea id="voiceText" placeholder="Jo bolna hai wo likho..." maxlength="500"></textarea>
+<label>Voice</label>
+<select id="voiceLang">
+<option value="en">English (US)</option>
+<option value="en-GB">English (UK)</option>
+<option value="ur">Urdu (Pakistan)</option>
+<option value="hi">Hindi</option>
+<option value="ar">Arabic</option>
+</select>
+<button class="btn" onclick="genVoice()">🔊 Generate Voice</button>
+<div class="result" id="voiceResult">
+<audio id="voiceOut" controls></audio>
+<button class="dl" onclick="downloadVoice()">⬇ Download</button>
+</div>
+</div>
+
+<div class="foot">© 2026 Adnan AI — Developer Adnan</div>
 </div>
 
 <script src="https://js.puter.com/v2/"></script>
 <script>
-var currentVideo = null;
-function setPrompt(s){
-    var el = document.getElementById('promptIn');
-    el.value = el.value.trim() ? el.value.trim() + ', ' + s : s;
-}
-function showErr(m){
-    var e = document.getElementById('errBox'); e.textContent = m; e.classList.add('on');
-    setTimeout(function(){e.classList.remove('on')}, 15000);
-}
-function gen(){
-    var p = document.getElementById('promptIn').value.trim();
-    var d = parseInt(document.getElementById('durSel').value);
-    if(!p){ showErr('Prompt likho'); return; }
-    var btn = document.getElementById('genBtn');
-    btn.disabled = true; btn.textContent = '⏳ Generating...';
-    document.getElementById('statusBox').classList.add('on');
-    document.getElementById('resultBox').classList.remove('on');
-    document.getElementById('statusMsg').textContent = 'Video generate ho rahi hai...';
+var currentImg = '', currentVid = null, currentVoice = '';
 
-    puter.ai.txt2vid(p, {
-        model: 'wan-ai/wan2.7-t2v',
-        seconds: d
-    })
+function showPanel(type){
+    ['image','video','voice'].forEach(function(t){
+        document.getElementById('box-' + t).classList.remove('active');
+        document.getElementById('panel-' + t).classList.remove('on');
+    });
+    document.getElementById('box-' + type).classList.add('active');
+    document.getElementById('panel-' + type).classList.add('on');
+}
+
+function showErr(id, msg){
+    var e = document.getElementById(id);
+    e.textContent = msg; e.classList.add('on');
+    setTimeout(function(){e.classList.remove('on')}, 12000);
+}
+
+// ===== IMAGE =====
+function genImage(){
+    var p = document.getElementById('imgPrompt').value.trim();
+    if(!p){ showErr('imgErr', 'Prompt likho'); return; }
+    var size = document.getElementById('imgSize').value.split('x');
+    var url = 'https://image.pollinations.ai/prompt/' + encodeURIComponent(p)
+        + '?width=' + size[0] + '&height=' + size[1] + '&nologo=true&seed=' + Math.floor(Math.random()*999999);
+    var btn = document.getElementById('imgBtn');
+    btn.disabled = true; btn.textContent = '⏳ Generating...';
+    document.getElementById('imgStatus').classList.add('on');
+    document.getElementById('imgResult').classList.remove('on');
+    var img = new Image();
+    img.onload = function(){
+        document.getElementById('imgOut').src = url;
+        document.getElementById('imgResult').classList.add('on');
+        document.getElementById('imgStatus').classList.remove('on');
+        btn.disabled = false; btn.textContent = '🎨 Generate Again';
+        currentImg = url;
+    };
+    img.onerror = function(){
+        showErr('imgErr', 'Image generate nahi hui. Dobara try karo.');
+        document.getElementById('imgStatus').classList.remove('on');
+        btn.disabled = false; btn.textContent = '🎨 Generate Image';
+    };
+    img.src = url;
+}
+function downloadImg(){
+    if(!currentImg) return;
+    fetch(currentImg).then(function(r){return r.blob()}).then(function(b){
+        var u = URL.createObjectURL(b);
+        var a = document.createElement('a');
+        a.href = u; a.download = 'adnan-img-' + Date.now() + '.jpg';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    });
+}
+
+// ===== VIDEO =====
+function genVideo(){
+    var p = document.getElementById('vidPrompt').value.trim();
+    if(!p){ showErr('vidErr', 'Prompt likho'); return; }
+    var btn = document.getElementById('vidBtn');
+    btn.disabled = true; btn.textContent = '⏳ Generating...';
+    document.getElementById('vidStatus').classList.add('on');
+    document.getElementById('vidResult').classList.remove('on');
+
+    if(typeof puter === 'undefined'){
+        showErr('vidErr', 'Puter.js load nahi hua. Refresh karo.');
+        btn.disabled = false; btn.textContent = '🎬 Generate Video';
+        document.getElementById('vidStatus').classList.remove('on');
+        return;
+    }
+
+    puter.ai.txt2vid(p, {model: 'google/veo-3.1-lite', seconds: 5})
     .then(function(videoElement){
-        document.getElementById('statusBox').classList.remove('on');
-        var box = document.getElementById('resultBox');
+        document.getElementById('vidStatus').classList.remove('on');
+        var box = document.getElementById('vidOut');
         box.innerHTML = '';
         box.appendChild(videoElement);
         videoElement.controls = true;
         videoElement.loop = true;
         videoElement.style.width = '100%';
         videoElement.style.borderRadius = '14px';
-        videoElement.style.marginBottom = '14px';
-        var dlBtn = document.createElement('button');
-        dlBtn.className = 'dl';
-        dlBtn.textContent = '⬇ Download';
-        dlBtn.onclick = function(){ downloadVideo(videoElement); };
-        box.appendChild(dlBtn);
-        box.classList.add('on');
-        btn.disabled = false; btn.textContent = '🎬 Generate Another';
+        document.getElementById('vidResult').classList.add('on');
+        btn.disabled = false; btn.textContent = '🎬 Generate Again';
+        currentVid = videoElement;
         videoElement.play().catch(function(){});
-        currentVideo = videoElement;
     })
     .catch(function(err){
-        document.getElementById('statusBox').classList.remove('on');
-        showErr('Error: ' + JSON.stringify(err).substring(0, 200));
+        document.getElementById('vidStatus').classList.remove('on');
+        showErr('vidErr', 'Video error: ' + (typeof err === 'string' ? err : JSON.stringify(err)).substring(0, 150));
         btn.disabled = false; btn.textContent = '🎬 Generate Video';
     });
 }
-function downloadVideo(v){
-    var src = v.src || v.currentSrc;
-    if(!src){ showErr('Video URL nahi mila'); return; }
+function downloadVid(){
+    if(!currentVid) return;
+    var src = currentVid.src || currentVid.currentSrc;
+    if(!src){ showErr('vidErr', 'URL nahi mila'); return; }
     var a = document.createElement('a');
-    a.href = src; a.download = 'adnan-ai-' + Date.now() + '.mp4';
+    a.href = src; a.download = 'adnan-vid-' + Date.now() + '.mp4';
     a.target = '_blank';
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
 }
-function download(){ if(currentVideo) downloadVideo(currentVideo); }
+
+// ===== VOICE =====
+function genVoice(){
+    var text = document.getElementById('voiceText').value.trim();
+    if(!text){ showErr('vidErr', 'Text likho'); return; }
+    var lang = document.getElementById('voiceLang').value;
+    if(typeof puter === 'undefined' || !puter.ai.txt2speech){
+        showErr('vidErr', 'Puter.js load nahi hua');
+        return;
+    }
+    puter.ai.txt2speech(text, lang)
+    .then(function(audioElement){
+        var box = document.getElementById('voiceResult');
+        var out = document.getElementById('voiceOut');
+        // Replace with fresh audio element
+        var fresh = audioElement.cloneNode(true);
+        out.src = audioElement.src;
+        box.classList.add('on');
+        out.play().catch(function(){});
+        currentVoice = audioElement.src;
+    })
+    .catch(function(err){
+        showErr('vidErr', 'Voice error: ' + (typeof err === 'string' ? err : JSON.stringify(err)).substring(0, 150));
+    });
+}
+function downloadVoice(){
+    if(!currentVoice) return;
+    var a = document.createElement('a');
+    a.href = currentVoice; a.download = 'adnan-voice-' + Date.now() + '.mp3';
+    a.target = '_blank';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
 </script>
 </body></html>
