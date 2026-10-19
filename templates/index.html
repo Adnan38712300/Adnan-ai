@@ -149,24 +149,44 @@ function showErr(id, msg){
 }
 
 // ===== IMAGE =====
-function genImage(retry){
+function genImage(attempt){
+    attempt = attempt || 0;
     var p = document.getElementById('imgPrompt').value.trim();
     if(!p){ showErr('imgErr', 'Prompt likho'); return; }
     var size = document.getElementById('imgSize').value.split('x');
     var seed = Math.floor(Math.random()*999999);
-    var url = 'https://image.pollinations.ai/prompt/' + encodeURIComponent(p)
-        + '?width=' + size[0] + '&height=' + size[1]
-        + '&nologo=true&seed=' + seed
-        + '&model=flux'
-        + '&enhance=true';
+    
+    // 3 different endpoints try karega
+    var endpoints = [
+        'https://gen.pollinations.ai/image/' + encodeURIComponent(p) + '?width=' + size[0] + '&height=' + size[1] + '&seed=' + seed + '&nologo=true',
+        'https://image.pollinations.ai/prompt/' + encodeURIComponent(p) + '?width=' + size[0] + '&height=' + size[1] + '&seed=' + seed + '&nologo=true&model=flux',
+        'https://image.pollinations.ai/prompt/' + encodeURIComponent(p) + '?width=' + size[0] + '&height=' + size[1] + '&seed=' + seed + '&nologo=true&model=turbo'
+    ];
+    
+    if(attempt >= endpoints.length){
+        showErr('imgErr', 'Sab endpoints fail. 1 minute baad try karo.');
+        document.getElementById('imgStatus').classList.remove('on');
+        document.getElementById('imgBtn').disabled = false;
+        document.getElementById('imgBtn').textContent = '🎨 Try Again';
+        return;
+    }
+    
+    var url = endpoints[attempt];
     var btn = document.getElementById('imgBtn');
-    btn.disabled = true; btn.textContent = '⏳ Generating...';
+    btn.disabled = true;
+    btn.textContent = '⏳ Generating (try ' + (attempt+1) + '/3)...';
     document.getElementById('imgStatus').classList.add('on');
     document.getElementById('imgResult').classList.remove('on');
     document.getElementById('imgErr').classList.remove('on');
 
     var img = new Image();
+    var timeout = setTimeout(function(){
+        img.src = '';
+        genImage(attempt + 1);
+    }, 15000);
+    
     img.onload = function(){
+        clearTimeout(timeout);
         document.getElementById('imgOut').src = url;
         document.getElementById('imgResult').classList.add('on');
         document.getElementById('imgStatus').classList.remove('on');
@@ -174,14 +194,8 @@ function genImage(retry){
         currentImg = url;
     };
     img.onerror = function(){
-        if(!retry){
-            // Auto-retry 1 baar 3 second baad
-            setTimeout(function(){ genImage(true); }, 3000);
-        } else {
-            showErr('imgErr', 'Server busy hai. 10 second baad "Generate Again" dabao.');
-            document.getElementById('imgStatus').classList.remove('on');
-            btn.disabled = false; btn.textContent = '🎨 Generate Again';
-        }
+        clearTimeout(timeout);
+        genImage(attempt + 1);
     };
     img.src = url;
 }
